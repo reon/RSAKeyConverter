@@ -43,7 +43,7 @@ public class RSAKeyConverterTool {
 	 */
 	public static void main(String[] args) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		if (args.length < 2) {
-			System.err.println("Usage:\nopensc.RSAKeyConverterTool input.p12 output.p12");
+			System.err.println("Usage:\nopensc.RSAKeyConverterTool input.p12 output.p12 [password]");
 			System.exit(1);
 		}
 		
@@ -51,9 +51,11 @@ public class RSAKeyConverterTool {
 		char [] pass;
 		String oldkeystore = args[0];
 		String newkystore = args[1];
-		
-		pass = cons.readPassword("%s: ", "Password for " + oldkeystore);
-		
+		if (args.length != 3)
+			pass = cons.readPassword("%s: ", "Password for " + oldkeystore);
+		else
+			pass = args[2].toCharArray();
+
 		KeyStore ks = KeyStore.getInstance("PKCS12");
 		ks.load(new FileInputStream(oldkeystore), pass);
 		
